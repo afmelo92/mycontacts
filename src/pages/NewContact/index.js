@@ -1,10 +1,9 @@
 import React from 'react';
+import PageHeader from '../../components/PageHeader';
 
 function NewContactPage() {
   return (
-    <div>
-      NewContactPage
-    </div>
+    <PageHeader title="Novo contato" />
   );
 }
 
