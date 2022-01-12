@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
@@ -14,7 +15,7 @@ function HomePage() {
       </S.InputSearchContainer>
       <S.Header>
         <strong>3 contatos</strong>
-        <a href="/">Novo contato</a>
+        <Link to="/new">Novo contato</Link>
       </S.Header>
 
       <S.ListContainer>
@@ -36,54 +37,15 @@ function HomePage() {
           </div>
 
           <div className="actions">
-            <a href="/">
+            <Link to="/edit/123">
               <img src={edit} alt="Edit" />
-            </a>
+            </Link>
             <button type="button">
               <img src={trash} alt="Delete" />
             </button>
           </div>
         </S.Card>
 
-        <S.Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Andre Melo</strong>
-              <small>instagram</small>
-            </div>
-            <span>andre@afmelo.com</span>
-            <span>(41) 9 9901-3657</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Edit" />
-            </a>
-            <button type="button">
-              <img src={trash} alt="Delete" />
-            </button>
-          </div>
-        </S.Card>
-
-        <S.Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Andre Melo</strong>
-              <small>instagram</small>
-            </div>
-            <span>andre@afmelo.com</span>
-            <span>(41) 9 9901-3657</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Edit" />
-            </a>
-            <button type="button">
-              <img src={trash} alt="Delete" />
-            </button>
-          </div>
-        </S.Card>
       </S.ListContainer>
     </S.Container>
   );
