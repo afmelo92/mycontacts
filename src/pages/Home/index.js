@@ -6,9 +6,12 @@ import trash from '../../assets/images/icons/trash.svg';
 
 import * as S from './styles';
 
-function ContactsList() {
+function HomePage() {
   return (
     <S.Container>
+      <S.InputSearchContainer>
+        <input type="text" placeholder="Pesquise pelo nome" />
+      </S.InputSearchContainer>
       <S.Header>
         <strong>3 contatos</strong>
         <a href="/">Novo contato</a>
@@ -86,4 +89,4 @@ function ContactsList() {
   );
 }
 
-export default ContactsList;
+export default HomePage;
