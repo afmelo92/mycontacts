@@ -13,6 +13,8 @@ export default styled.input`
 
   transition: border-color 0.2s ease;
 
+  appearance: none;
+
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
   }
