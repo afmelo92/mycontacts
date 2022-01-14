@@ -5,7 +5,7 @@ import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import Loader from '../../components/Loader';
-import { delay } from '../../utils/delay';
+import ContactsService from '../../services/ContactsService';
 import formatPhone from '../../utils/formatPhone';
 
 import * as S from './styles';
@@ -25,11 +25,9 @@ function HomePage() {
       try {
         setLoading(true);
 
-        const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
+        const constactsList = await ContactsService.listContacts(orderBy);
 
-        await delay(2000);
-        const data = await response.json();
-        setContacts(data);
+        setContacts(constactsList);
       } catch (err) {
         console.log('error', err);
       } finally {
