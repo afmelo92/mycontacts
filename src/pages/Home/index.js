@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
+import sad from '../../assets/images/sad.svg';
+import Button from '../../components/Button';
 import Loader from '../../components/Loader';
 import ContactsService from '../../services/ContactsService';
 import formatPhone from '../../utils/formatPhone';
@@ -15,6 +17,7 @@ function HomePage() {
   const [orderBy, setOrderBy] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -29,7 +32,7 @@ function HomePage() {
 
         setContacts(constactsList);
       } catch (err) {
-        console.log('error', err);
+        setHasError(true);
       } finally {
         setLoading(false);
       }
@@ -57,13 +60,28 @@ function HomePage() {
           onChange={handleChangeSearchTerm}
         />
       </S.InputSearchContainer>
-      <S.Header>
-        <strong>
-          {filteredContacts.length}
-          {filteredContacts.length === 1 ? ' contato' : ' contatos'}
-        </strong>
+      <S.Header hasError={hasError}>
+        {
+          !hasError && (
+            <strong>
+              {filteredContacts.length}
+              {filteredContacts.length === 1 ? ' contato' : ' contatos'}
+            </strong>
+          )
+        }
         <Link to="/new">Novo contato</Link>
       </S.Header>
+
+      {hasError && (
+        <S.ErrorContainer>
+          <img src={sad} alt="sad" width="100" />
+          <strong>
+            Ocorreu um erro ao obter seu contatos!
+          </strong>
+          <Button>Tentar novamente</Button>
+
+        </S.ErrorContainer>
+      )}
 
       {filteredContacts.length > 0 && (
         <S.ListHeader orderBy={orderBy}>
