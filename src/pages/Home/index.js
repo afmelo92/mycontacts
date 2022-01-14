@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
 import { Link } from 'react-router-dom';
 
 import arrow from '../../assets/images/icons/arrow.svg';
@@ -23,23 +25,24 @@ function HomePage() {
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
-  useEffect(() => {
-    async function loadContacts() {
-      try {
-        setLoading(true);
+  const loadContacts = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        const constactsList = await ContactsService.listContacts(orderBy);
+      const constactsList = await ContactsService.listContacts(orderBy);
 
-        setContacts(constactsList);
-      } catch (err) {
-        setHasError(true);
-      } finally {
-        setLoading(false);
-      }
+      setContacts(constactsList);
+      setHasError(false);
+    } catch (err) {
+      setHasError(true);
+    } finally {
+      setLoading(false);
     }
-
-    loadContacts();
   }, [orderBy]);
+
+  useEffect(() => {
+    loadContacts();
+  }, [loadContacts]);
 
   function handleToggleOrderBy() {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
@@ -47,6 +50,10 @@ function HomePage() {
 
   function handleChangeSearchTerm(event) {
     setSearchTerm(event.target.value);
+  }
+
+  function handleTryAgain() {
+    loadContacts();
   }
 
   return (
@@ -78,41 +85,45 @@ function HomePage() {
           <strong>
             Ocorreu um erro ao obter seu contatos!
           </strong>
-          <Button>Tentar novamente</Button>
+          <Button onClick={handleTryAgain}>Tentar novamente</Button>
 
         </S.ErrorContainer>
       )}
 
-      {filteredContacts.length > 0 && (
-        <S.ListHeader orderBy={orderBy}>
-          <button type="button" onClick={handleToggleOrderBy}>
-            <span>Nome</span>
-            <img src={arrow} alt="Arrow" />
-          </button>
-        </S.ListHeader>
-      )}
-
-      {filteredContacts.map((contact) => (
-        <S.Card key={contact.id}>
-          <div className="info">
-            <div className="contact-name">
-              <strong>{contact.name}</strong>
-              {contact.category_name && <small>{contact.category_name}</small>}
-            </div>
-            <span>{contact.email}</span>
-            <span>{formatPhone(contact.phone)}</span>
-          </div>
-
-          <div className="actions">
-            <Link to={`/edit/${contact.id}`}>
-              <img src={edit} alt="Edit" />
-            </Link>
-            <button type="button">
-              <img src={trash} alt="Delete" />
+      {!hasError && (
+        <>
+          {filteredContacts.length > 0 && (
+          <S.ListHeader orderBy={orderBy}>
+            <button type="button" onClick={handleToggleOrderBy}>
+              <span>Nome</span>
+              <img src={arrow} alt="Arrow" />
             </button>
-          </div>
-        </S.Card>
-      ))}
+          </S.ListHeader>
+          )}
+
+          {filteredContacts.map((contact) => (
+            <S.Card key={contact.id}>
+              <div className="info">
+                <div className="contact-name">
+                  <strong>{contact.name}</strong>
+                  {contact.category_name && <small>{contact.category_name}</small>}
+                </div>
+                <span>{contact.email}</span>
+                <span>{formatPhone(contact.phone)}</span>
+              </div>
+
+              <div className="actions">
+                <Link to={`/edit/${contact.id}`}>
+                  <img src={edit} alt="Edit" />
+                </Link>
+                <button type="button">
+                  <img src={trash} alt="Delete" />
+                </button>
+              </div>
+            </S.Card>
+          ))}
+        </>
+      )}
 
     </S.Container>
   );
