@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
-// import Loader from '../../components/Loader';
+import Loader from '../../components/Loader';
 
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
@@ -9,27 +9,28 @@ import trash from '../../assets/images/icons/trash.svg';
 import formatPhone from '../../utils/formatPhone';
 
 import * as S from './styles';
+import { delay } from '../../utils/delay';
 
 function HomePage() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
-  // const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    // setLoading(true);
+    setLoading(true);
     fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
+        await delay(2000);
         const data = await response.json();
         setContacts(data);
-        // setLoading((prevState) => !prevState);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, [orderBy]);
 
   function handleToggleOrderBy() {
@@ -42,6 +43,7 @@ function HomePage() {
 
   return (
     <S.Container>
+      <Loader isLoading={loading} />
       <S.InputSearchContainer>
         <input
           value={searchTerm}
