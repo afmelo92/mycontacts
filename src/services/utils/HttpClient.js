@@ -6,11 +6,15 @@ class HttpClient {
   }
 
   async get(path) {
-    const response = await fetch(`${this.baseURL}${path}`);
-
     await delay(2000);
 
-    return response.json();
+    const response = await fetch(`${this.baseURL}${path}`);
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    throw new Error(`${response.status} :::: ${response.statusText}`);
   }
 
   async post({ path, data }) {
