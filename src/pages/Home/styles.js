@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   margin-top: 32px;
@@ -30,11 +30,12 @@ export const Header = styled.div`
   }
 `;
 
-export const ListContainer = styled.div`
-  margin-top: 24px;
-
-  header {
+export const ListHeader = styled.header`
+  ${({ theme, orderBy }) => css`
+    margin-top: 24px;
     margin-bottom: 8px;
+
+
 
     button {
     background: transparent;
@@ -45,10 +46,15 @@ export const ListContainer = styled.div`
       span {
         margin-right: 8px;
         font-weight: bold;
-        color: ${({ theme }) => theme.colors.primary.main};
+        color: ${theme.colors.primary.main};
+      }
+
+      img {
+        transition: transform 0.5s ease;
+        transform: ${orderBy === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)'};
       }
     }
-  }
+  `}
 `;
 
 export const Card = styled.div`
