@@ -1,10 +1,12 @@
-import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import Routes from '../../Routes';
+import Header from '../Header';
+
 import GlobalStyle from '../../assets/styles/global';
 import defaultTheme from '../../assets/styles/themes/default';
 import * as S from './styles';
-import Header from '../Header';
-import Routes from '../../Routes';
 
 function App() {
   return (

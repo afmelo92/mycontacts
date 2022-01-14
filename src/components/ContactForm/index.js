@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
-import isEmailValid from '../../utils/isEmailValid';
-import formatPhone from '../../utils/formatPhone';
 import useErrors from '../../hooks/useErrors';
-
+import formatPhone from '../../utils/formatPhone';
+import isEmailValid from '../../utils/isEmailValid';
 import Button from '../Button';
 import FormGroup from '../FormGroup';
 import Input from '../Input';
