@@ -8,7 +8,7 @@ export const Header = styled.div`
   margin-top: 32px;
   display: flex;
   align-items: center;
-  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
+  justify-content: ${({ justifyContent }) => justifyContent};
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
   padding-bottom: 16px;
 
@@ -138,6 +138,23 @@ export const ErrorContainer = styled.div`
     font-size: 22px;
     color: ${({ theme }) => theme.colors.danger.main}
   }
+`;
 
+export const EmptyListContainer = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.gray[200]};
+    text-align: center;
+    margin-top: 8px;
+
+    strong {
+      color: ${({ theme }) => theme.colors.praimary.main};
+
+    }
+  }
 
 `;
