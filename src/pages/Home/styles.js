@@ -152,9 +152,25 @@ export const EmptyListContainer = styled.div`
     margin-top: 8px;
 
     strong {
-      color: ${({ theme }) => theme.colors.praimary.main};
+      color: ${({ theme }) => theme.colors.primary.main};
 
     }
   }
 
+`;
+
+export const SearchNotFoundContainer = styled.div`
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+
+  span {
+    margin-left: 24px;
+    color: ${({ theme }) => theme.colors.gray[200]};
+    word-break: break-word;
+
+    strong {
+
+    }
+  }
 `;

@@ -1,6 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React, {
-  useEffect, useState, useMemo, useCallback,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
 } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +11,7 @@ import emptyBox from '../../assets/images/empty-box.svg';
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
+import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import sad from '../../assets/images/sad.svg';
 import Button from '../../components/Button';
 import Loader from '../../components/Loader';
@@ -112,11 +116,28 @@ function HomePage() {
             <img src={emptyBox} alt="empty box" />
             <p>
               Você ainda não tem nenhum contato cadastrado. Clique no botão
-              <strong>Novo contato</strong>
+              <strong>{' Novo contato '}</strong>
               acima para cadastrar o seu primeiro.
             </p>
           </S.EmptyListContainer>
           )}
+
+          {(contacts.length > 0 && filteredContacts.length < 1) && (
+            <S.SearchNotFoundContainer>
+              <img src={magnifierQuestion} alt="magnifier question" />
+
+              <span>
+                Nenhum resultado encontrado para
+                {' '}
+                <strong>
+                  &quot;
+                  {searchTerm}
+                  &quot;
+                </strong>
+              </span>
+            </S.SearchNotFoundContainer>
+          )}
+
           {filteredContacts.length > 0 && (
           <S.ListHeader orderBy={orderBy}>
             <button type="button" onClick={handleToggleOrderBy}>
