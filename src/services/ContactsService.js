@@ -13,6 +13,10 @@ class ContactsService {
     return this.httpClient.get(`/contacts/${id}`);
   }
 
+  async updateContact({ id, data }) {
+    return this.httpClient.put({ path: `/contacts/${id}`, data });
+  }
+
   async createContact(data) {
     return this.httpClient.post({ path: '/contacts', data });
   }

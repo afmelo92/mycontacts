@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import ContactForm from '../../components/ContactForm';
+import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
 import ContactsService from '../../services/ContactsService';
 
 function EditContactPage() {
   const { id } = useParams();
+  const history = useHistory();
   const [contact, setContact] = useState({});
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -15,9 +17,9 @@ function EditContactPage() {
     try {
       setLoading(true);
 
-      const response = await ContactsService.getContact(id);
+      const singleContact = await ContactsService.getContact(id);
 
-      setContact(response);
+      setContact(singleContact);
       setHasError(false);
     } catch (error) {
       setHasError(true);
@@ -26,16 +28,37 @@ function EditContactPage() {
     }
   }, [id]);
 
+  const handleSubmit = useCallback(async (contactId, data) => {
+    try {
+      setLoading(true);
+
+      await ContactsService.updateContact({ id: contactId, data });
+
+      setHasError(false);
+      history.goBack();
+    } catch (error) {
+      setHasError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [history]);
+
   useEffect(() => {
     loadContacts();
   }, [loadContacts]);
+
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {!hasError && (
         <>
+          <Loader isLoading={loading} />
           <PageHeader title={`Editar ${contact.name}`} />
-          <ContactForm loading={loading} contact={contact} buttonLabel="Salvar alterações" />
+          <ContactForm
+            contact={contact}
+            buttonLabel="Salvar alterações"
+            action={handleSubmit}
+          />
         </>
       )}
     </>

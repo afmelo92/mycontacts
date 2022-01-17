@@ -11,7 +11,7 @@ import Select from '../Select';
 
 import * as S from './styles';
 
-function ContactForm({ buttonLabel, contact }) {
+function ContactForm({ buttonLabel, contact, action }) {
   const [name, setName] = useState(() => contact.name || '');
   const [email, setEmail] = useState(() => contact.email || '');
   const [phone, setPhone] = useState(() => contact.phone || '');
@@ -51,6 +51,13 @@ function ContactForm({ buttonLabel, contact }) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    action(contact.id, {
+      name,
+      email,
+      phone,
+      // eslint-disable-next-line camelcase
+      category_id: contact.category_id,
+    });
   }
 
   useEffect(() => {
@@ -62,7 +69,6 @@ function ContactForm({ buttonLabel, contact }) {
 
   return (
     <S.Form onSubmit={handleSubmit} noValidate>
-
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           type="text"
@@ -129,4 +135,6 @@ ContactForm.propTypes = {
     category_id: PropTypes.string,
     category_name: PropTypes.string,
   }),
+  // eslint-disable-next-line react/require-default-props
+  action: PropTypes.func,
 };
