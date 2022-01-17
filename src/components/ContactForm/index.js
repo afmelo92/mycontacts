@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import useErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
@@ -11,11 +11,11 @@ import Select from '../Select';
 
 import * as S from './styles';
 
-function ContactForm({ buttonLabel }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+function ContactForm({ buttonLabel, contact }) {
+  const [name, setName] = useState(() => contact.name || '');
+  const [email, setEmail] = useState(() => contact.email || '');
+  const [phone, setPhone] = useState(() => contact.phone || '');
+  const [category, setCategory] = useState(() => contact?.category_name || '');
   const {
     errors,
     setError,
@@ -51,11 +51,18 @@ function ContactForm({ buttonLabel }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('ninja');
   }
+
+  useEffect(() => {
+    setName(contact.name);
+    setEmail(contact.email);
+    setPhone(contact.phone);
+    setCategory(contact.category_name);
+  }, [contact]);
 
   return (
     <S.Form onSubmit={handleSubmit} noValidate>
+
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           type="text"
@@ -96,6 +103,8 @@ function ContactForm({ buttonLabel }) {
           <option value="twitter">Twitter</option>
           <option value="tiktok">TikTok</option>
           <option value="discord">Discord</option>
+          <option value="trabalho">Trabalho</option>
+          <option value="zoeira">Zoeira</option>
         </Select>
       </FormGroup>
       <S.ButtonContainer>
@@ -111,4 +120,13 @@ export default ContactForm;
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/require-default-props
+  contact: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+    category_id: PropTypes.string,
+    category_name: PropTypes.string,
+  }),
 };
