@@ -11,11 +11,11 @@ import Select from '../Select';
 
 import * as S from './styles';
 
-function ContactForm({ buttonLabel, contact, action }) {
-  const [name, setName] = useState(() => contact.name || '');
-  const [email, setEmail] = useState(() => contact.email || '');
-  const [phone, setPhone] = useState(() => contact.phone || '');
-  const [category, setCategory] = useState(() => contact?.category_name || '');
+function ContactForm({ buttonLabel, contact = null, action }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [category, setCategory] = useState('');
   const {
     errors,
     setError,
@@ -51,20 +51,30 @@ function ContactForm({ buttonLabel, contact, action }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    action(contact.id, {
-      name,
-      email,
-      phone,
-      // eslint-disable-next-line camelcase
-      category_id: contact.category_id,
-    });
+    if (contact) {
+      action(contact?.id || null, {
+        name,
+        email,
+        phone,
+        // eslint-disable-next-line camelcase
+        category_id: contact?.category_id || null,
+      });
+    } else {
+      action({
+        name,
+        email,
+        phone,
+        // eslint-disable-next-line camelcase
+        category_id: contact?.category_id || null,
+      });
+    }
   }
 
   useEffect(() => {
-    setName(contact.name);
-    setEmail(contact.email);
-    setPhone(contact.phone);
-    setCategory(contact.category_name);
+    setName(contact?.name || '');
+    setEmail(contact?.email || '');
+    setPhone(contact?.phone || '');
+    setCategory(contact?.category_name || '');
   }, [contact]);
 
   return (

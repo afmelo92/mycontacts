@@ -49,14 +49,27 @@ class HttpClient {
   }
 
   async post({ path, data }) {
-    const response = await fetch(`${this.baseURL}${path}`, {
-      method: 'POST',
-      body: data,
-    });
-
     await delay(2000);
 
-    return response.json();
+    const response = await fetch(`${this.baseURL}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    let body = null;
+
+    const contentType = response.headers.get('Content-Type');
+
+    if (contentType.includes('application/json')) {
+      body = await response.json();
+    }
+
+    if (response.ok) {
+      return body;
+    }
+
+    throw new APIError(response, body);
   }
 }
 

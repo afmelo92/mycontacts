@@ -17,8 +17,12 @@ class ContactsService {
     return this.httpClient.put({ path: `/contacts/${id}`, data });
   }
 
-  async createContact(data) {
+  async createContact({ data }) {
     return this.httpClient.post({ path: '/contacts', data });
+  }
+
+  async deleteContact(id) {
+    return this.httpClient.delete(`/contacts/${id}`);
   }
 }
 
