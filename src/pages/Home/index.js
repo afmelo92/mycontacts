@@ -62,6 +62,21 @@ function HomePage() {
     loadContacts();
   }
 
+  async function handleDelete(id) {
+    try {
+      setLoading(true);
+
+      await ContactsService.deleteContact(id);
+
+      setHasError(false);
+      loadContacts();
+    } catch (error) {
+      setHasError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <S.Container>
       <Loader isLoading={loading} />
@@ -85,16 +100,19 @@ function HomePage() {
                   ? 'space-between'
                   : 'center'
               ))
-}
+      }
       >
+
         {
           (!hasError && contacts.length > 0) && (
             <strong>
-              {filteredContacts.length}
-              {filteredContacts.length === 1 ? ' contato' : ' contatos'}
+              {filteredContacts.length === 1
+                ? `${filteredContacts.length} contato`
+                : ` ${filteredContacts.length} contatos`}
             </strong>
           )
         }
+
         <Link to="/new">Novo contato</Link>
       </S.Header>
 
@@ -162,7 +180,7 @@ function HomePage() {
                 <Link to={`/edit/${contact.id}`}>
                   <img src={edit} alt="Edit" />
                 </Link>
-                <button type="button">
+                <button type="button" onClick={() => handleDelete(contact.id)}>
                   <img src={trash} alt="Delete" />
                 </button>
               </div>

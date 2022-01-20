@@ -71,6 +71,20 @@ class HttpClient {
 
     throw new APIError(response, body);
   }
+
+  async delete(path) {
+    await delay(2000);
+
+    const response = await fetch(`${this.baseURL}${path}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      return;
+    }
+
+    throw new APIError(response);
+  }
 }
 
 export default HttpClient;
