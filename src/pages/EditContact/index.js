@@ -6,6 +6,8 @@ import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
 import ContactsService from '../../services/ContactsService';
 
+import * as S from './styles';
+
 function EditContactPage() {
   const { id } = useParams();
   const history = useHistory();
@@ -48,8 +50,7 @@ function EditContactPage() {
   }, [loadContacts]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
+    <S.Container>
       {!hasError && (
         <>
           <Loader isLoading={loading} />
@@ -61,7 +62,7 @@ function EditContactPage() {
           />
         </>
       )}
-    </>
+    </S.Container>
   );
 }
 

@@ -6,6 +6,8 @@ import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
 import ContactsService from '../../services/ContactsService';
 
+import * as S from './styles';
+
 function NewContactPage() {
   const history = useHistory();
   const [hasError, setHasError] = useState(false);
@@ -25,8 +27,7 @@ function NewContactPage() {
   }, [history]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
+    <S.Container>
       {!hasError && (
       <>
         <Loader isLoading={loading} />
@@ -34,7 +35,7 @@ function NewContactPage() {
         <ContactForm buttonLabel="Cadastrar" action={handleSubmit} />
       </>
       )}
-    </>
+    </S.Container>
   );
 }
 
