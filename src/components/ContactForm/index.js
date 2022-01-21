@@ -71,23 +71,16 @@ function ContactForm({ buttonLabel, contact = null, action }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (contact) {
-      action(contact?.id || null, {
+    action({
+      data: {
         name,
         email,
         phone,
         // eslint-disable-next-line camelcase
         category_id: category || null,
-      });
-    } else {
-      action({
-        name,
-        email,
-        phone,
-        // eslint-disable-next-line camelcase
-        category_id: category || null,
-      });
-    }
+      },
+      contactId: contact?.id || null,
+    });
   }
 
   useEffect(() => {

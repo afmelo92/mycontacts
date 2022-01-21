@@ -30,7 +30,7 @@ function EditContactPage() {
     }
   }, [id]);
 
-  const handleSubmit = useCallback(async (contactId, data) => {
+  const handleSubmit = useCallback(async ({ data, contactId }) => {
     try {
       setLoading(true);
 

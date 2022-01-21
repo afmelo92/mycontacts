@@ -13,7 +13,7 @@ function NewContactPage() {
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = useCallback(async (data) => {
+  const handleSubmit = useCallback(async ({ data }) => {
     try {
       setLoading(true);
       await ContactsService.createContact({ data });
