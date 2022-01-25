@@ -14,17 +14,22 @@ function NewContactPage() {
   const handleSubmit = useCallback(async ({ data }) => {
     try {
       setLoading(true);
+
       await ContactsService.createContact({ data });
+
       setHasError(false);
+
       addMessage({
         id: String(Math.floor(Math.random() * 1000)),
         type: 'success',
         title: 'Sucesso!',
         message: 'Usuário criado com sucesso.',
       });
+
       history.goBack();
     } catch (error) {
       setHasError(true);
+
       addMessage({
         id: String(Math.floor(Math.random() * 1000)),
         type: 'danger',

@@ -20,7 +20,9 @@ function EditContactPage() {
       const singleContact = await ContactsService.getContact(id);
 
       setContact(singleContact);
+
       setHasError(false);
+
       addMessage({
         id: String(Math.floor(Math.random() * 1000)),
         type: 'success',
@@ -29,6 +31,7 @@ function EditContactPage() {
       });
     } catch (error) {
       setHasError(true);
+
       addMessage({
         id: String(Math.floor(Math.random() * 1000)),
         type: 'danger',
@@ -38,7 +41,8 @@ function EditContactPage() {
     } finally {
       setLoading(false);
     }
-  }, [id, addMessage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleSubmit = useCallback(async ({ data, contactId }) => {
     try {
