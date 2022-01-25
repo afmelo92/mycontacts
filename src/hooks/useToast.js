@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import {
-  createContext, useCallback, useContext, useState, useEffect,
+  createContext, useState, useContext, useCallback, useEffect,
 } from 'react';
 
 const ToastContext = createContext({
   messages: [],
   addMessage: () => null,
   deleteMessage: () => null,
+  clearMessages: () => null,
 });
 
 function ToastProvider({ children }) {
@@ -22,6 +23,10 @@ function ToastProvider({ children }) {
     const filteredMessages = messages.filter((message) => message.id !== id);
     setMessages(filteredMessages);
   }, [messages]);
+
+  const clearMessages = useCallback(() => {
+    setMessages([]);
+  }, []);
 
   useEffect(() => {
     if (removing) {
@@ -40,6 +45,7 @@ function ToastProvider({ children }) {
     <ToastContext.Provider value={{
       messages,
       addMessage,
+      clearMessages,
       deleteMessage,
     }}
     >

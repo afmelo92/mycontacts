@@ -5,7 +5,8 @@ import edit from 'assets/images/icons/edit.svg';
 import trash from 'assets/images/icons/trash.svg';
 import magnifierQuestion from 'assets/images/magnifier-question.svg';
 import sad from 'assets/images/sad.svg';
-import { Loader, Toast, Button } from 'components';
+import { Loader, Button } from 'components';
+import { useToast } from 'hooks/useToast';
 import React, {
   useEffect,
   useState,
@@ -24,7 +25,7 @@ function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const { addMessage } = useToast();
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,13 +38,20 @@ function HomePage() {
       const constactsList = await ContactsService.listContacts(orderBy);
 
       setContacts(constactsList);
+
       setHasError(false);
     } catch (err) {
       setHasError(true);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'danger',
+        title: 'Oops!',
+        message: 'Houve um erro ao obter sua lista de contatos. Por favor, tente novamente mais tarde.',
+      });
     } finally {
       setLoading(false);
     }
-  }, [orderBy]);
+  }, [orderBy, addMessage]);
 
   useEffect(() => {
     loadContacts();
@@ -68,31 +76,30 @@ function HomePage() {
       await ContactsService.deleteContact(id);
 
       setHasError(false);
+
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'success',
+        title: 'Sucesso!',
+        message: 'Usuário deletado com sucesso.',
+      });
       loadContacts();
     } catch (error) {
       setHasError(true);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'danger',
+        title: 'Oops!',
+        message: 'Houve um erro ao deletar esse contato. Por favor, tente novamente mais tarde.',
+      });
     } finally {
       setLoading(false);
     }
   }
 
-  console.log('ST:::: ', showToast);
   return (
     <S.Container>
-      {showToast && (
-      <Toast
-        show={showToast}
-        data={
-          {
-            type: 'success',
-            title: 'Test Title',
-            message: 'This is a test message',
-          }
-        }
-      />
-      )}
       <Loader isLoading={loading} />
-      <button type="button" onClick={() => setShowToast((prev) => !prev)}>show</button>
       {contacts.length > 0 && (
         <S.InputSearchContainer>
           <input

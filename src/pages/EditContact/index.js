@@ -1,4 +1,5 @@
 import { ContactForm, Loader, PageHeader } from 'components';
+import { useToast } from 'hooks/useToast';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import ContactsService from 'services/ContactsService';
@@ -11,7 +12,7 @@ function EditContactPage() {
   const [contact, setContact] = useState({});
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-
+  const { addMessage } = useToast();
   const loadContacts = useCallback(async () => {
     try {
       setLoading(true);
@@ -20,12 +21,24 @@ function EditContactPage() {
 
       setContact(singleContact);
       setHasError(false);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'success',
+        title: 'Sucesso!',
+        message: 'Usuário carregado com sucesso.',
+      });
     } catch (error) {
       setHasError(true);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'danger',
+        title: 'Oops!',
+        message: 'Houve um erro ao obter seu contato. Por favor, tente novamente mais tarde.',
+      });
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, addMessage]);
 
   const handleSubmit = useCallback(async ({ data, contactId }) => {
     try {
@@ -34,13 +47,25 @@ function EditContactPage() {
       await ContactsService.updateContact({ id: contactId, data });
 
       setHasError(false);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'success',
+        title: 'Sucesso!',
+        message: 'Usuário editado com sucesso.',
+      });
       history.goBack();
     } catch (error) {
       setHasError(true);
+      addMessage({
+        id: String(Math.floor(Math.random() * 1000)),
+        type: 'danger',
+        title: 'Oops!',
+        message: 'Houve um erro ao editar seu contato. Por favor, tente novamente mais tarde.',
+      });
     } finally {
       setLoading(false);
     }
-  }, [history]);
+  }, [history, addMessage]);
 
   useEffect(() => {
     loadContacts();
