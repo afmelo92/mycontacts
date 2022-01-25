@@ -1,10 +1,9 @@
+import logo from 'assets/images/logo.svg';
 import React from 'react';
-
-import logo from '../../assets/images/logo.svg';
 
 import * as S from './styles';
 
-function Header() {
+export function Header() {
   return (
     <S.Container>
       <img src={logo} alt="MyContacts" width="201" />
@@ -12,5 +11,3 @@ function Header() {
     </S.Container>
   );
 }
-
-export default Header;

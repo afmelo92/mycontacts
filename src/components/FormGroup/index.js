@@ -3,7 +3,7 @@ import React from 'react';
 
 import * as S from './styles';
 
-function FormGroup({ children, error }) {
+export function FormGroup({ children, error }) {
   return (
     <S.Container>
       {children}
@@ -11,8 +11,6 @@ function FormGroup({ children, error }) {
     </S.Container>
   );
 }
-
-export default FormGroup;
 
 FormGroup.propTypes = {
   children: PropTypes.node.isRequired,

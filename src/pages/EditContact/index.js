@@ -1,10 +1,7 @@
+import { ContactForm, Loader, PageHeader } from 'components';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-
-import ContactForm from '../../components/ContactForm';
-import Loader from '../../components/Loader';
-import PageHeader from '../../components/PageHeader';
-import ContactsService from '../../services/ContactsService';
+import ContactsService from 'services/ContactsService';
 
 import * as S from './styles';
 

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export default styled.button`
+export const Button = styled.button`
   height: 52px;
   border: none;
   background: ${({ theme }) => theme.colors.primary.main};

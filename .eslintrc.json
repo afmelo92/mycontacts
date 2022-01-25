@@ -20,10 +20,17 @@
     "react-hooks",
     "eslint-plugin-import-helpers"
   ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  },
   "rules": {
     "import-helpers/order-imports": [
       "warn",
-      { // example configuration
+      {
           "newlinesBetween": "always",
           "groups": [
               "module",
@@ -37,6 +44,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-no-constructed-context-values": "off",
     "react/react-in-jsx-scope": "off",
     "import/prefer-default-export": "off",
     "react/jsx-no-bind": "off",

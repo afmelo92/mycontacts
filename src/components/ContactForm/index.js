@@ -1,20 +1,17 @@
+import {
+  FormGroup, Loader, Input, Select, Button,
+} from 'components';
+import useErrors from 'hooks/useErrors';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect, useCallback } from 'react';
-
-import useErrors from '../../hooks/useErrors';
-import CategoriesService from '../../services/CategoriesService';
-import formatCapitalize from '../../utils/formatCapitalize';
-import formatPhone from '../../utils/formatPhone';
-import isEmailValid from '../../utils/isEmailValid';
-import Button from '../Button';
-import FormGroup from '../FormGroup';
-import Input from '../Input';
-import Loader from '../Loader';
-import Select from '../Select';
+import CategoriesService from 'services/CategoriesService';
+import formatCapitalize from 'utils/formatCapitalize';
+import formatPhone from 'utils/formatPhone';
+import isEmailValid from 'utils/isEmailValid';
 
 import * as S from './styles';
 
-function ContactForm({ buttonLabel, contact = null, action }) {
+export function ContactForm({ buttonLabel, contact = null, action }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -145,8 +142,6 @@ function ContactForm({ buttonLabel, contact = null, action }) {
     </S.Form>
   );
 }
-
-export default ContactForm;
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,

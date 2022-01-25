@@ -1,12 +1,11 @@
+import arrow from 'assets/images/icons/arrow.svg';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import arrow from '../../assets/images/icons/arrow.svg';
-
 import * as S from './styles';
 
-function PageHeader({ title }) {
+export function PageHeader({ title }) {
   return (
     <S.Container>
       <Link to="/">
@@ -17,8 +16,6 @@ function PageHeader({ title }) {
     </S.Container>
   );
 }
-
-export default PageHeader;
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,

@@ -1,14 +1,14 @@
+/* eslint-disable import/order */
+import { Header } from 'components/Header';
 import { BrowserRouter } from 'react-router-dom';
+import Routes from 'Routes';
 import { ThemeProvider } from 'styled-components';
 
-import Routes from '../../Routes';
-import Header from '../Header';
-
-import GlobalStyle from '../../assets/styles/global';
-import defaultTheme from '../../assets/styles/themes/default';
 import * as S from './styles';
+import GlobalStyle from 'assets/styles/global';
+import defaultTheme from 'assets/styles/themes/default';
 
-function App() {
+export function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={defaultTheme}>
@@ -21,5 +21,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import * as S from './styles';
 
-function Loader({ isLoading }) {
+export function Loader({ isLoading }) {
   if (!isLoading) {
     return null;
   }
@@ -20,8 +20,6 @@ function Loader({ isLoading }) {
     )
   );
 }
-
-export default Loader;
 
 Loader.propTypes = {
   isLoading: PropTypes.bool.isRequired,

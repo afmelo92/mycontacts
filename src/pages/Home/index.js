@@ -1,4 +1,11 @@
 /* eslint-disable no-nested-ternary */
+import emptyBox from 'assets/images/empty-box.svg';
+import arrow from 'assets/images/icons/arrow.svg';
+import edit from 'assets/images/icons/edit.svg';
+import trash from 'assets/images/icons/trash.svg';
+import magnifierQuestion from 'assets/images/magnifier-question.svg';
+import sad from 'assets/images/sad.svg';
+import { Loader, Toast, Button } from 'components';
 import React, {
   useEffect,
   useState,
@@ -6,17 +13,8 @@ import React, {
   useCallback,
 } from 'react';
 import { Link } from 'react-router-dom';
-
-import emptyBox from '../../assets/images/empty-box.svg';
-import arrow from '../../assets/images/icons/arrow.svg';
-import edit from '../../assets/images/icons/edit.svg';
-import trash from '../../assets/images/icons/trash.svg';
-import magnifierQuestion from '../../assets/images/magnifier-question.svg';
-import sad from '../../assets/images/sad.svg';
-import Button from '../../components/Button';
-import Loader from '../../components/Loader';
-import ContactsService from '../../services/ContactsService';
-import formatPhone from '../../utils/formatPhone';
+import ContactsService from 'services/ContactsService';
+import formatPhone from 'utils/formatPhone';
 
 import * as S from './styles';
 
@@ -26,6 +24,7 @@ function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -77,10 +76,23 @@ function HomePage() {
     }
   }
 
+  console.log('ST:::: ', showToast);
   return (
     <S.Container>
+      {showToast && (
+      <Toast
+        show={showToast}
+        data={
+          {
+            type: 'success',
+            title: 'Test Title',
+            message: 'This is a test message',
+          }
+        }
+      />
+      )}
       <Loader isLoading={loading} />
-
+      <button type="button" onClick={() => setShowToast((prev) => !prev)}>show</button>
       {contacts.length > 0 && (
         <S.InputSearchContainer>
           <input
@@ -129,6 +141,7 @@ function HomePage() {
 
       {!hasError && (
         <>
+
           {contacts.length < 1 && !loading && (
           <S.EmptyListContainer>
             <img src={emptyBox} alt="empty box" />

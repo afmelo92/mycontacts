@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export default styled.input`
+export const Input = styled.input`
   width: 100%;
   background: #fff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
