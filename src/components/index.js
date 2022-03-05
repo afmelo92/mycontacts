@@ -9,3 +9,4 @@ export * from './Toast';
 export * from './Button';
 export * from './Select';
 export * from './Input';
+export * from './Spinner';

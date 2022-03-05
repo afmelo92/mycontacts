@@ -11,7 +11,7 @@ export function Select({
   } = useErrors();
 
   return (
-    <S.Container>
+    <S.Container isLoading={isLoading}>
       <select
         value={value}
         onChange={(event) => setValue(event.target.value)}

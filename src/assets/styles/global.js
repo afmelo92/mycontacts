@@ -13,6 +13,7 @@ export default createGlobalStyle`
     color: ${({ theme }) => theme.colors.gray[900]};
     font-size: 16px;
     overflow-x: hidden;
+    padding-bottom: 48px;
   }
 
   button {

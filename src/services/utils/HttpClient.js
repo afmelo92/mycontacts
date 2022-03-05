@@ -1,5 +1,5 @@
 import APIError from 'errors/APIError';
-import { delay } from 'utils/delay';
+// import { delay } from 'utils/delay';
 
 class HttpClient {
   constructor(baseURL) {
@@ -49,7 +49,7 @@ class HttpClient {
   }
 
   async post({ path, data }) {
-    await delay(2000);
+    // await delay(2000);
 
     const response = await fetch(`${this.baseURL}${path}`, {
       method: 'POST',
@@ -73,7 +73,7 @@ class HttpClient {
   }
 
   async delete(path) {
-    await delay(2000);
+    // await delay(2000);
 
     const response = await fetch(`${this.baseURL}${path}`, {
       method: 'DELETE',

@@ -13,6 +13,7 @@ function EditContactPage() {
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const { addMessage } = useToast();
+
   const loadContacts = useCallback(async () => {
     try {
       setLoading(true);
@@ -22,13 +23,6 @@ function EditContactPage() {
       setContact(singleContact);
 
       setHasError(false);
-
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
-        type: 'success',
-        title: 'Sucesso!',
-        message: 'Usuário carregado com sucesso.',
-      });
     } catch (error) {
       setHasError(true);
 

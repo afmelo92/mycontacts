@@ -19,6 +19,8 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasErrors, setHasErrors] = useState(false);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+
   const {
     errors,
     setError,
@@ -37,6 +39,9 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
       setHasErrors(true);
     } finally {
       setLoading(false);
+      setTimeout(() => {
+        setIsLoadingCategories(false);
+      }, 2000);
     }
   }, []);
 
@@ -119,11 +124,12 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
           maxLength={15}
         />
       </FormGroup>
-      <FormGroup error={getErrorMessageByFieldName('category')}>
+      <FormGroup isLoading={isLoadingCategories} error={getErrorMessageByFieldName('category')}>
         <Select
           value={category}
-          onChange={(event) => setCategory(event.target.value)}
-          error={getErrorMessageByFieldName('category')}
+          setValue={setCategory}
+          fieldName="category"
+          isLoading={isLoadingCategories}
         >
           <option value="">Categoria</option>
           {!hasErrors && (categories.map((item) => (
@@ -131,7 +137,6 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
               {formatCapitalize(item.name)}
             </option>
           )))}
-
         </Select>
       </FormGroup>
       <S.ButtonContainer>

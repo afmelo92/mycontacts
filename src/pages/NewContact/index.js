@@ -8,9 +8,11 @@ import * as S from './styles';
 
 function NewContactPage() {
   const history = useHistory();
+  const { addMessage } = useToast();
+
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { addMessage } = useToast();
+
   const handleSubmit = useCallback(async ({ data }) => {
     try {
       setLoading(true);
