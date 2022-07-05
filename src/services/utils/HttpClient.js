@@ -1,36 +1,26 @@
+/* eslint-disable no-restricted-syntax */
 import APIError from 'errors/APIError';
-// import { delay } from 'utils/delay';
 
 class HttpClient {
   constructor(baseURL) {
     this.baseURL = baseURL;
   }
 
-  async get(path) {
-    // await delay(2000);
+  async makeRequest({ path, options }) {
+    const headers = new Headers();
 
-    const response = await fetch(`${this.baseURL}${path}`);
-
-    let body = null;
-
-    const contentType = response.headers.get('Content-Type');
-
-    if (contentType.includes('application/json')) {
-      body = await response.json();
+    if (options.body) {
+      headers.append('Content-Type', 'application/json');
     }
 
-    if (response.ok) {
-      return body;
+    if (options.headers) {
+      Object.entries(options.headers).forEach(([key, value]) => headers.append(key, value));
     }
 
-    throw new APIError(response, body);
-  }
-
-  async put({ path, data }) {
     const response = await fetch(`${this.baseURL}${path}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      method: options.method,
+      body: JSON.stringify(options?.body),
+      headers,
     });
 
     let body = null;
@@ -45,45 +35,49 @@ class HttpClient {
       return body;
     }
 
-    throw new APIError(response, body);
+    return APIError('Houve um erro ao executar a request.');
   }
 
-  async post({ path, data }) {
-    // await delay(2000);
-
-    const response = await fetch(`${this.baseURL}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+  get({ path, options }) {
+    return this.makeRequest({
+      path,
+      options: {
+        method: 'GET',
+        headers: options?.headers,
+      },
     });
-
-    let body = null;
-
-    const contentType = response.headers.get('Content-Type');
-
-    if (contentType.includes('application/json')) {
-      body = await response.json();
-    }
-
-    if (response.ok) {
-      return body;
-    }
-
-    throw new APIError(response, body);
   }
 
-  async delete(path) {
-    // await delay(2000);
-
-    const response = await fetch(`${this.baseURL}${path}`, {
-      method: 'DELETE',
+  put({ path, options }) {
+    return this.makeRequest({
+      path,
+      options: {
+        method: 'PUT',
+        headers: options?.headers,
+        body: options?.data,
+      },
     });
+  }
 
-    if (response.ok) {
-      return;
-    }
+  post({ path, options }) {
+    return this.makeRequest({
+      path,
+      options: {
+        method: 'POST',
+        headers: options?.headers,
+        body: options?.data,
+      },
+    });
+  }
 
-    throw new APIError(response);
+  delete({ path, options }) {
+    return this.makeRequest({
+      path,
+      options: {
+        method: 'POST',
+        headers: options.headers,
+      },
+    });
   }
 }
 

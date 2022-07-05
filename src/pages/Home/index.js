@@ -35,9 +35,9 @@ function HomePage() {
     try {
       setLoading(true);
 
-      const constactsList = await ContactsService.listContacts(orderBy);
+      const contactsList = await ContactsService.listContacts(orderBy);
 
-      setContacts(constactsList);
+      setContacts(contactsList);
 
       setHasError(false);
     } catch (err) {

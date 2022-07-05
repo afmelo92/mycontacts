@@ -49,6 +49,7 @@
     "import/prefer-default-export": "off",
     "import/no-cycle": "off",
     "react/jsx-no-bind": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-empty": ["error", { "allowEmptyCatch": true }]
   }
 }

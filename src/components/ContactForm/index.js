@@ -39,9 +39,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
       setHasErrors(true);
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        setIsLoadingCategories(false);
-      }, 2000);
+      setIsLoadingCategories(false);
     }
   }, []);
 
@@ -78,7 +76,6 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
         name,
         email,
         phone,
-        // eslint-disable-next-line camelcase
         category_id: category || null,
       },
       contactId: contact?.id || null,
@@ -160,5 +157,5 @@ ContactForm.propTypes = {
     category_name: PropTypes.string,
   }),
   // eslint-disable-next-line react/require-default-props
-  action: PropTypes.func,
+  action: PropTypes.func.isRequired,
 };

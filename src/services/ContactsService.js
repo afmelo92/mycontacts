@@ -6,23 +6,35 @@ class ContactsService {
   }
 
   async listContacts(orderBy = 'asc') {
-    return this.httpClient.get(`/contacts?orderBy=${orderBy}`);
+    return this.httpClient.get({
+      path: `/contacts?orderBy=${orderBy}`,
+    });
   }
 
   async getContact(id) {
-    return this.httpClient.get(`/contacts/${id}`);
+    return this.httpClient.get({ path: `/contacts/${id}` });
   }
 
   async updateContact({ id, data }) {
-    return this.httpClient.put({ path: `/contacts/${id}`, data });
+    return this.httpClient.put({
+      path: `/contacts/${id}`,
+      options: {
+        data,
+      },
+    });
   }
 
   async createContact({ data }) {
-    return this.httpClient.post({ path: '/contacts', data });
+    return this.httpClient.post({
+      path: '/contacts',
+      options: {
+        data,
+      },
+    });
   }
 
   async deleteContact(id) {
-    return this.httpClient.delete(`/contacts/${id}`);
+    return this.httpClient.delete({ path: `/contacts/${id}` });
   }
 }
 
