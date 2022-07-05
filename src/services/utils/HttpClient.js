@@ -27,7 +27,7 @@ class HttpClient {
 
     const contentType = response.headers.get('Content-Type');
 
-    if (contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       body = await response.json();
     }
 
@@ -74,8 +74,8 @@ class HttpClient {
     return this.makeRequest({
       path,
       options: {
-        method: 'POST',
-        headers: options.headers,
+        method: 'DELETE',
+        headers: options?.headers,
       },
     });
   }

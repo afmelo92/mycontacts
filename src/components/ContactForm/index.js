@@ -20,6 +20,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
   const [loading, setLoading] = useState(true);
   const [hasErrors, setHasErrors] = useState(false);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     errors,
@@ -69,9 +70,12 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
     setPhone(formatPhone(event.target.value));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    action({
+
+    setIsSubmitting(true);
+
+    await action({
       data: {
         name,
         email,
@@ -80,6 +84,8 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
       },
       contactId: contact?.id || null,
     });
+
+    setIsSubmitting(false);
   }
 
   useEffect(() => {
@@ -100,6 +106,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
           value={name}
           onChange={handleNameChange}
           error={getErrorMessageByFieldName('name')}
+          disabled={isSubmitting}
         />
       </FormGroup>
       <FormGroup error={getErrorMessageByFieldName('email')}>
@@ -109,6 +116,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
           value={email}
           onChange={handleEmailChange}
           error={getErrorMessageByFieldName('email')}
+          disabled={isSubmitting}
         />
       </FormGroup>
       <FormGroup error={getErrorMessageByFieldName('phone')}>
@@ -119,6 +127,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
           onChange={handlePhoneChange}
           error={getErrorMessageByFieldName('phone')}
           maxLength={15}
+          disabled={isSubmitting}
         />
       </FormGroup>
       <FormGroup isLoading={isLoadingCategories} error={getErrorMessageByFieldName('category')}>
@@ -126,7 +135,7 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
           value={category}
           setValue={setCategory}
           fieldName="category"
-          isLoading={isLoadingCategories}
+          isLoading={isLoadingCategories || isSubmitting}
         >
           <option value="">Categoria</option>
           {!hasErrors && (categories.map((item) => (
@@ -137,7 +146,11 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
         </Select>
       </FormGroup>
       <S.ButtonContainer>
-        <Button type="submit" disabled={!isFormValid}>
+        <Button
+          type="submit"
+          disabled={!isFormValid}
+          isLoading={isSubmitting}
+        >
           {buttonLabel}
         </Button>
       </S.ButtonContainer>

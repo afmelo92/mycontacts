@@ -1,4 +1,4 @@
-import { ContactForm, Loader, PageHeader } from 'components';
+import { ContactForm, PageHeader } from 'components';
 import { useToast } from 'hooks/useToast';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -11,12 +11,9 @@ function NewContactPage() {
   const { addMessage } = useToast();
 
   const [hasError, setHasError] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(async ({ data }) => {
     try {
-      setLoading(true);
-
       await ContactsService.createContact({ data });
 
       setHasError(false);
@@ -38,8 +35,6 @@ function NewContactPage() {
         title: 'Oops!',
         message: 'Houve um erro ao criar o contato. Por favor, tente novamente mais tarde.',
       });
-    } finally {
-      setLoading(false);
     }
   }, [history, addMessage]);
 
@@ -47,7 +42,6 @@ function NewContactPage() {
     <S.Container>
       {!hasError && (
       <>
-        <Loader isLoading={loading} />
         <PageHeader title="Novo contato" />
         <ContactForm buttonLabel="Cadastrar" action={handleSubmit} />
       </>
