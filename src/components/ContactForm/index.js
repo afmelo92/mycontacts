@@ -11,7 +11,7 @@ import isEmailValid from 'utils/isEmailValid';
 
 import * as S from './styles';
 
-export function ContactForm({ buttonLabel, contact = null, action }) {
+export function ContactForm({ buttonLabel, contact = {}, action }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -86,6 +86,11 @@ export function ContactForm({ buttonLabel, contact = null, action }) {
     });
 
     setIsSubmitting(false);
+
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCategory('');
   }
 
   useEffect(() => {

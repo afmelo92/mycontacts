@@ -16,11 +16,13 @@ function ToastMessage({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onRemoveMessage(message.id);
+      onRemoveMessage(id);
     }, duration || 5000);
 
-    return clearTimeout(timer);
-  }, [duration, message, onRemoveMessage]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [id, duration, onRemoveMessage]);
 
   function handleRemoveToast() {
     onRemoveMessage(id);
