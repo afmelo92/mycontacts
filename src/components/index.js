@@ -6,6 +6,7 @@ export * from './Loader';
 export * from './Modal';
 export * from './PageHeader';
 export * from './Toast';
+export * from './NewToast/ToastContainer';
 export * from './Button';
 export * from './Select';
 export * from './Input';

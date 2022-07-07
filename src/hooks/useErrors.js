@@ -3,6 +3,10 @@ import { useState } from 'react';
 export default function useErrors() {
   const [errors, setErrors] = useState([]);
 
+  function clearErrors() {
+    return setErrors([]);
+  }
+
   function setError({ field, message }) {
     const errorAlreadyExists = errors.find((error) => error.field === 'email');
 
@@ -26,6 +30,7 @@ export default function useErrors() {
 
   return {
     errors,
+    clearErrors,
     setError,
     removeError,
     getErrorMessageByFieldName,

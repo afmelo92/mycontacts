@@ -1,51 +1,33 @@
 import { ContactForm, PageHeader } from 'components';
-import { useToast } from 'hooks/useToast';
-import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback } from 'react';
 import ContactsService from 'services/ContactsService';
+import toast from 'utils/toast';
 
 import * as S from './styles';
 
 function NewContactPage() {
-  const history = useHistory();
-  const { addMessage } = useToast();
-
-  const [hasError, setHasError] = useState(false);
-
   const handleSubmit = useCallback(async ({ data }) => {
     try {
       await ContactsService.createContact({ data });
 
-      setHasError(false);
-
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'success',
-        title: 'Sucesso!',
-        message: 'Usuário criado com sucesso.',
+        text: 'Contato cadastrado com sucesso.',
+        duration: 3000,
       });
-
-      history.goBack();
     } catch (error) {
-      setHasError(true);
-
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'danger',
-        title: 'Oops!',
-        message: 'Houve um erro ao criar o contato. Por favor, tente novamente mais tarde.',
+        text: 'Houve um erro ao cadastrar o contato.',
+        duration: 3000,
       });
     }
-  }, [history, addMessage]);
+  }, []);
 
   return (
     <S.Container>
-      {!hasError && (
-      <>
-        <PageHeader title="Novo contato" />
-        <ContactForm buttonLabel="Cadastrar" action={handleSubmit} />
-      </>
-      )}
+      <PageHeader title="Novo contato" />
+      <ContactForm buttonLabel="Cadastrar" action={handleSubmit} />
     </S.Container>
   );
 }
