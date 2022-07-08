@@ -6,7 +6,6 @@ import trash from 'assets/images/icons/trash.svg';
 import magnifierQuestion from 'assets/images/magnifier-question.svg';
 import sad from 'assets/images/sad.svg';
 import { Loader, Button } from 'components';
-import { useToast } from 'hooks/useToast';
 import React, {
   useEffect,
   useState,
@@ -16,6 +15,7 @@ import React, {
 import { Link } from 'react-router-dom';
 import ContactsService from 'services/ContactsService';
 import formatPhone from 'utils/formatPhone';
+import toast from 'utils/toast';
 
 import * as S from './styles';
 
@@ -25,7 +25,6 @@ function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const { addMessage } = useToast();
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -42,16 +41,14 @@ function HomePage() {
       setHasError(false);
     } catch (err) {
       setHasError(true);
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'danger',
-        title: 'Oops!',
-        message: 'Houve um erro ao obter sua lista de contatos. Por favor, tente novamente mais tarde.',
+        text: 'Houve um erro ao obter sua lista de contatos. Por favor, tente novamente mais tarde.',
       });
     } finally {
       setLoading(false);
     }
-  }, [orderBy, addMessage]);
+  }, [orderBy]);
 
   useEffect(() => {
     loadContacts();
@@ -77,20 +74,16 @@ function HomePage() {
 
       setHasError(false);
 
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'success',
-        title: 'Sucesso!',
-        message: 'Usuário deletado com sucesso.',
+        text: 'Contato deletado com sucesso.',
       });
       loadContacts();
     } catch (error) {
       setHasError(true);
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'danger',
-        title: 'Oops!',
-        message: 'Houve um erro ao deletar esse contato. Por favor, tente novamente mais tarde.',
+        text: 'Houve um erro ao deletar esse contato. Por favor, tente novamente mais tarde.',
       });
     } finally {
       setLoading(false);

@@ -3,7 +3,9 @@ import {
 } from 'components';
 import useErrors from 'hooks/useErrors';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, forwardRef, useImperativeHandle,
+} from 'react';
 import CategoriesService from 'services/CategoriesService';
 import formatCapitalize from 'utils/formatCapitalize';
 import formatPhone from 'utils/formatPhone';
@@ -11,11 +13,12 @@ import isEmailValid from 'utils/isEmailValid';
 
 import * as S from './styles';
 
-export function ContactForm({ buttonLabel, contact = {}, action }) {
+export const ContactForm = forwardRef(({ buttonLabel, action }, ref) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
+  const [contactId, setContactId] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasErrors, setHasErrors] = useState(false);
@@ -45,6 +48,22 @@ export function ContactForm({ buttonLabel, contact = {}, action }) {
   }, []);
 
   const isFormValid = name && errors.length === 0;
+
+  useImperativeHandle(ref, () => ({
+    setFieldValues: (contact) => {
+      setName(contact.name ?? '');
+      setEmail(contact.email ?? '');
+      setPhone(contact.phone ?? '');
+      setCategory(contact.category_id ?? '');
+      setContactId(contact.id ?? '');
+    },
+    resetFields: () => {
+      setName('');
+      setEmail('');
+      setPhone('');
+      setCategory('');
+    },
+  }), []);
 
   function handleNameChange(event) {
     setName(event.target.value);
@@ -82,24 +101,15 @@ export function ContactForm({ buttonLabel, contact = {}, action }) {
         phone,
         category_id: category || null,
       },
-      contactId: contact?.id || null,
+      contactId: contactId || null,
     });
 
     setIsSubmitting(false);
-
-    setName('');
-    setEmail('');
-    setPhone('');
-    setCategory('');
   }
 
   useEffect(() => {
-    setName(contact?.name || '');
-    setEmail(contact?.email || '');
-    setPhone(contact?.phone || '');
-    setCategory(contact?.category_id || '');
     loadCategories();
-  }, [contact, loadCategories]);
+  }, [loadCategories]);
 
   return (
     <S.Form onSubmit={handleSubmit} noValidate>
@@ -161,19 +171,9 @@ export function ContactForm({ buttonLabel, contact = {}, action }) {
       </S.ButtonContainer>
     </S.Form>
   );
-}
+});
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/require-default-props
-  contact: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    category_id: PropTypes.string,
-    category_name: PropTypes.string,
-  }),
-  // eslint-disable-next-line react/require-default-props
   action: PropTypes.func.isRequired,
 };

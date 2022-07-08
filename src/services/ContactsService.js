@@ -5,17 +5,17 @@ class ContactsService {
     this.httpClient = new HttpClient('http://localhost:3001');
   }
 
-  async listContacts(orderBy = 'asc') {
+  listContacts(orderBy = 'asc') {
     return this.httpClient.get({
       path: `/contacts?orderBy=${orderBy}`,
     });
   }
 
-  async getContact(id) {
+  getContactById(id) {
     return this.httpClient.get({ path: `/contacts/${id}` });
   }
 
-  async updateContact({ id, data }) {
+  updateContact({ id, data }) {
     return this.httpClient.put({
       path: `/contacts/${id}`,
       options: {
@@ -24,7 +24,7 @@ class ContactsService {
     });
   }
 
-  async createContact({ data }) {
+  createContact({ data }) {
     return this.httpClient.post({
       path: '/contacts',
       options: {
@@ -33,7 +33,7 @@ class ContactsService {
     });
   }
 
-  async deleteContact(id) {
+  deleteContact(id) {
     return this.httpClient.delete({ path: `/contacts/${id}` });
   }
 }

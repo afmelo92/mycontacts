@@ -1,14 +1,17 @@
 import { ContactForm, PageHeader } from 'components';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import ContactsService from 'services/ContactsService';
 import toast from 'utils/toast';
 
 import * as S from './styles';
 
 function NewContactPage() {
+  const contactFormRef = useRef(null);
   const handleSubmit = useCallback(async ({ data }) => {
     try {
       await ContactsService.createContact({ data });
+
+      contactFormRef.current.resetFields();
 
       toast({
         type: 'success',
@@ -27,7 +30,11 @@ function NewContactPage() {
   return (
     <S.Container>
       <PageHeader title="Novo contato" />
-      <ContactForm buttonLabel="Cadastrar" action={handleSubmit} />
+      <ContactForm
+        ref={contactFormRef}
+        buttonLabel="Cadastrar"
+        action={handleSubmit}
+      />
     </S.Container>
   );
 }

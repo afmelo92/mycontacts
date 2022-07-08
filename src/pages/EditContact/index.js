@@ -1,87 +1,72 @@
-import { ContactForm, Loader, PageHeader } from 'components';
-import { useToast } from 'hooks/useToast';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { Loader, PageHeader, ContactForm } from 'components';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import ContactsService from 'services/ContactsService';
+import toast from 'utils/toast';
 
 import * as S from './styles';
 
 function EditContactPage() {
   const { id } = useParams();
   const history = useHistory();
+  const contactFormRef = useRef(null);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [contact, setContact] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const { addMessage } = useToast();
 
-  const loadContacts = useCallback(async () => {
+  const loadContact = useCallback(async () => {
     try {
-      setLoading(true);
+      const contactData = await ContactsService.getContactById(id);
 
-      const singleContact = await ContactsService.getContact(id);
+      setContact(contactData);
 
-      setContact(singleContact);
+      contactFormRef.current.setFieldValues(contactData);
 
-      setHasError(false);
+      setIsLoading(false);
     } catch (error) {
-      setHasError(true);
-
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'danger',
-        title: 'Oops!',
-        message: 'Houve um erro ao obter seu contato. Por favor, tente novamente mais tarde.',
+        text: 'Houve um erro ao carregar o contato. Tente novamente mais tarde.',
       });
-    } finally {
-      setLoading(false);
+
+      history.push('/');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleSubmit = useCallback(async ({ data, contactId }) => {
     try {
-      setLoading(true);
+      const contactData = await ContactsService.updateContact({ id: contactId, data });
 
-      await ContactsService.updateContact({ id: contactId, data });
+      setContact(contactData);
 
-      setHasError(false);
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'success',
-        title: 'Sucesso!',
-        message: 'Usuário editado com sucesso.',
+        text: 'Contato editado com sucesso.',
       });
-      history.goBack();
     } catch (error) {
-      setHasError(true);
-      addMessage({
-        id: String(Math.floor(Math.random() * 1000)),
+      toast({
         type: 'danger',
-        title: 'Oops!',
-        message: 'Houve um erro ao editar seu contato. Por favor, tente novamente mais tarde.',
+        text: 'Houve um erro ao editar o contato. Tente novamente mais tarde.',
       });
-    } finally {
-      setLoading(false);
     }
-  }, [history, addMessage]);
+  }, []);
 
   useEffect(() => {
-    loadContacts();
-  }, [loadContacts]);
+    loadContact();
+  }, [loadContact]);
 
   return (
     <S.Container>
-      {!hasError && (
-        <>
-          <Loader isLoading={loading} />
-          <PageHeader title={`Editar ${contact.name}`} />
-          <ContactForm
-            contact={contact}
-            buttonLabel="Salvar alterações"
-            action={handleSubmit}
-          />
-        </>
-      )}
+      <Loader isLoading={isLoading} />
+      <PageHeader title={isLoading ? 'Carregando...' : `Editar ${contact.name}`} />
+      <ContactForm
+        ref={contactFormRef}
+        buttonLabel="Salvar alterações"
+        action={handleSubmit}
+      />
     </S.Container>
   );
 }
