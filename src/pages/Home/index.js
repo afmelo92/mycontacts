@@ -5,7 +5,7 @@ import edit from 'assets/images/icons/edit.svg';
 import trash from 'assets/images/icons/trash.svg';
 import magnifierQuestion from 'assets/images/magnifier-question.svg';
 import sad from 'assets/images/sad.svg';
-import { Loader, Button } from 'components';
+import { Loader, Button, Modal } from 'components';
 import React, {
   useEffect,
   useState,
@@ -25,6 +25,8 @@ function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -66,11 +68,20 @@ function HomePage() {
     loadContacts();
   }
 
-  async function handleDelete(id) {
+  function handleDeleteContact(contact) {
+    setIsDeleteModalVisible(true);
+    setContactBeingDeleted(contact);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalVisible(false);
+  }
+
+  async function handleConfirmDeleteContact() {
     try {
       setLoading(true);
 
-      await ContactsService.deleteContact(id);
+      await ContactsService.deleteContact(contactBeingDeleted.id);
 
       setHasError(false);
 
@@ -87,12 +98,25 @@ function HomePage() {
       });
     } finally {
       setLoading(false);
+      handleCloseDeleteModal();
     }
   }
 
   return (
     <S.Container>
       <Loader isLoading={loading} />
+
+      <Modal
+        danger
+        visible={isDeleteModalVisible}
+        title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"`}
+        confirmLabel="Deletar"
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteContact}
+      >
+        <p>Essa ação não pode ser revertida</p>
+      </Modal>
+
       {contacts.length > 0 && (
         <S.InputSearchContainer>
           <input
@@ -193,7 +217,7 @@ function HomePage() {
                 <Link to={`/edit/${contact.id}`}>
                   <img src={edit} alt="Edit" />
                 </Link>
-                <button type="button" onClick={() => handleDelete(contact.id)}>
+                <button type="button" onClick={() => handleDeleteContact(contact)}>
                   <img src={trash} alt="Delete" />
                 </button>
               </div>
