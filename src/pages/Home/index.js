@@ -27,6 +27,7 @@ function HomePage() {
   const [hasError, setHasError] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
+  const [isLoadingDelete, setisLoadingDelete] = useState(false);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -75,13 +76,16 @@ function HomePage() {
 
   function handleCloseDeleteModal() {
     setIsDeleteModalVisible(false);
+    setContactBeingDeleted(null);
   }
 
   async function handleConfirmDeleteContact() {
     try {
-      setLoading(true);
+      setisLoadingDelete(true);
 
       await ContactsService.deleteContact(contactBeingDeleted.id);
+
+      setContacts((prev) => prev.filter((contact) => contact.id !== contactBeingDeleted.id));
 
       setHasError(false);
 
@@ -89,7 +93,6 @@ function HomePage() {
         type: 'success',
         text: 'Contato deletado com sucesso.',
       });
-      loadContacts();
     } catch (error) {
       setHasError(true);
       toast({
@@ -97,7 +100,7 @@ function HomePage() {
         text: 'Houve um erro ao deletar esse contato. Por favor, tente novamente mais tarde.',
       });
     } finally {
-      setLoading(false);
+      setisLoadingDelete(false);
       handleCloseDeleteModal();
     }
   }
@@ -113,6 +116,7 @@ function HomePage() {
         confirmLabel="Deletar"
         onCancel={handleCloseDeleteModal}
         onConfirm={handleConfirmDeleteContact}
+        isLoading={isLoadingDelete}
       >
         <p>Essa ação não pode ser revertida</p>
       </Modal>
