@@ -1,7 +1,7 @@
 import { Button } from 'components';
+import { ReactPortal } from 'components/ReactPortal';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import * as S from './styles';
 
@@ -20,36 +20,40 @@ export function Modal({
     return null;
   }
 
-  return ReactDOM.createPortal(
-    <S.Overlay>
-      <S.Container danger={danger}>
-        <h1>{title}</h1>
+  return (
+    <ReactPortal
+      containerId="modal-root"
+    >
+      <S.Overlay>
+        <S.Container danger={danger}>
+          <h1>{title}</h1>
 
-        <S.Content>
-          {children}
-        </S.Content>
+          <S.Content>
+            {children}
+          </S.Content>
 
-        <S.Footer>
-          <button
-            type="button"
-            className="cancel-button"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            {cancelLabel}
-          </button>
-          <Button
-            type="button"
-            danger={danger}
-            onClick={onConfirm}
-            isLoading={isLoading}
-          >
-            {confirmLabel}
-          </Button>
-        </S.Footer>
-      </S.Container>
-    </S.Overlay>,
-    document.getElementById('modal-root'),
+          <S.Footer>
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={onCancel}
+              disabled={isLoading}
+            >
+              {cancelLabel}
+            </button>
+            <Button
+              type="button"
+              danger={danger}
+              onClick={onConfirm}
+              isLoading={isLoading}
+            >
+              {confirmLabel}
+            </Button>
+          </S.Footer>
+        </S.Container>
+      </S.Overlay>
+      ,
+    </ReactPortal>
   );
 }
 
@@ -58,7 +62,7 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   cancelLabel: PropTypes.string,
-  confirmLabel: PropTypes.string.isRequired,
+  confirmLabel: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
