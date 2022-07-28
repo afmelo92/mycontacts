@@ -1,4 +1,5 @@
 import { Loader, PageHeader, ContactForm } from 'components';
+import useSafeAsyncAction from 'hooks/useSafeAsyncAction';
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
@@ -11,6 +12,8 @@ import * as S from './styles';
 function EditContactPage() {
   const { id } = useParams();
   const history = useHistory();
+  const safeAsyncAction = useSafeAsyncAction();
+
   const contactFormRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -20,21 +23,24 @@ function EditContactPage() {
     try {
       const contactData = await ContactsService.getContactById(id);
 
-      contactFormRef.current.setFieldValues(contactData);
+      safeAsyncAction(() => {
+        contactFormRef.current.setFieldValues(contactData);
 
-      setIsLoading(false);
+        setIsLoading(false);
 
-      setContact(contactData);
-    } catch (error) {
-      toast({
-        type: 'danger',
-        text: 'Houve um erro ao carregar o contato. Tente novamente mais tarde.',
+        setContact(contactData);
       });
+    } catch (error) {
+      safeAsyncAction(() => {
+        toast({
+          type: 'danger',
+          text: 'Houve um erro ao carregar o contato. Tente novamente mais tarde.',
+        });
 
-      history.push('/');
+        history.push('/');
+      });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, safeAsyncAction, history]);
 
   const handleSubmit = useCallback(async ({ data, contactId }) => {
     try {
