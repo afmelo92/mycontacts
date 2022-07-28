@@ -1,7 +1,8 @@
 import {
-  FormGroup, Loader, Input, Select, Button,
+  FormGroup, Input, Select, Button,
 } from 'components';
 import useErrors from 'hooks/useErrors';
+import useSafeAsyncState from 'hooks/useSafeAsyncState';
 import PropTypes from 'prop-types';
 import React, {
   useState, useEffect, useCallback, forwardRef, useImperativeHandle,
@@ -19,10 +20,9 @@ export const ContactForm = forwardRef(({ buttonLabel, action }, ref) => {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
   const [contactId, setContactId] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useSafeAsyncState([]);
   const [hasErrors, setHasErrors] = useState(false);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isLoadingCategories, setIsLoadingCategories] = useSafeAsyncState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -34,7 +34,6 @@ export const ContactForm = forwardRef(({ buttonLabel, action }, ref) => {
 
   const loadCategories = useCallback(async () => {
     try {
-      setLoading(true);
       const response = await CategoriesService.listCategories();
 
       setCategories(response);
@@ -42,10 +41,9 @@ export const ContactForm = forwardRef(({ buttonLabel, action }, ref) => {
     } catch (error) {
       setHasErrors(true);
     } finally {
-      setLoading(false);
       setIsLoadingCategories(false);
     }
-  }, []);
+  }, [setCategories, setIsLoadingCategories]);
 
   const isFormValid = name && errors.length === 0;
 
@@ -113,7 +111,6 @@ export const ContactForm = forwardRef(({ buttonLabel, action }, ref) => {
 
   return (
     <S.Form onSubmit={handleSubmit} noValidate>
-      <Loader isLoading={loading} />
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           type="text"

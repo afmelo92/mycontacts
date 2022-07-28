@@ -20,11 +20,11 @@ function EditContactPage() {
     try {
       const contactData = await ContactsService.getContactById(id);
 
-      setContact(contactData);
-
       contactFormRef.current.setFieldValues(contactData);
 
       setIsLoading(false);
+
+      setContact(contactData);
     } catch (error) {
       toast({
         type: 'danger',

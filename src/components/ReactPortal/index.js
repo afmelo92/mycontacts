@@ -21,5 +21,5 @@ export function ReactPortal({
 
 ReactPortal.propTypes = {
   children: PropTypes.node.isRequired,
-  name: PropTypes.string.isRequired,
+  containerId: PropTypes.string.isRequired,
 };
